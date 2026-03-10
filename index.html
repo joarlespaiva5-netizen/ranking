@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Batalha dos Inscritos - Dashboard</title>
+    
+    <link rel="icon" href="data:,">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=8">
+</head>
+<body>
+
+    <header class="app-header glass">
+        <div class="header-content">
+            <div class="logo-area">
+                <i class="fas fa-shield-alt logo-icon"></i>
+                <h1 id="page-title">Histórico</h1>
+            </div>
+            <div class="search-btn" onclick="focarBusca()">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+        <div class="search-container" id="search-box" style="display: none;">
+            <input type="text" id="globalSearch" placeholder="Buscar guerreiro..." onkeyup="filtrarListaGlobal()">
+            <i class="fas fa-times" onclick="fecharBusca()"></i>
+        </div>
+    </header>
+
+    <main class="app-content">
+        
+        <div id="view-dashboard" class="hidden fade-in">
+            <div class="premium-banner">
+                <h2>O OLIMPO DA ARENA</h2>
+                <p>Os maiores guerreiros de todas as temporadas</p>
+            </div>
+
+            <div class="section-header">
+                <h3><i class="fas fa-trophy" style="color: gold;"></i> Maiores Campeões</h3>
+            </div>
+            <div class="horizontal-scroll" id="global-wins-container">
+                <div style="text-align:center; width: 100%; color:#666;"><i class="fas fa-spinner fa-spin"></i> Calculando rankings...</div>
+            </div>
+
+            <div class="section-header" style="margin-top: 20px;">
+                <h3><i class="fas fa-skull" style="color: #ff0055;"></i> Maiores Matadores</h3>
+            </div>
+            <div class="horizontal-scroll" id="global-kills-container">
+                <div style="text-align:center; width: 100%; color:#666;"><i class="fas fa-spinner fa-spin"></i> Calculando rankings...</div>
+            </div>
+
+            <div class="ad-container ad-space-premium">
+                <span>Espaço para Publicidade</span>
+            </div>
+        </div>
+
+        <div id="view-videos" class="fade-in">
+            <div class="section-header">
+                <h3><i class="fas fa-history" style="color: #00f2ea;"></i> Histórico de Batalhas</h3>
+            </div>
+            <div id="lista-videos-container" class="videos-list"></div>
+        </div>
+
+        <div id="view-ranking" class="hidden fade-in">
+            <button class="btn-voltar" onclick="mudarAba('videos')"><i class="fas fa-arrow-left"></i> Voltar pro Histórico</button>
+            
+            <div class="match-stats-card glass">
+                <div class="r-stat"><span>Sobreviventes</span><strong id="total-players-count">0</strong></div>
+                <div class="r-stat"><span>Top Kill da Partida</span><strong id="top-kill-count" class="highlight">-</strong></div>
+                <div id="header-action" style="margin-top: 10px; width: 100%;"></div>
+            </div>
+            
+            <div id="lista-jogadores-topo" class="players-list"></div>
+
+            <div class="ad-container ad-space-premium">
+                <span>Espaço para Publicidade</span>
+            </div>
+
+            <div id="lista-jogadores-resto" class="players-list"></div>
+            <div class="spacer-bottom"></div>
+        </div>
+        
+        <div id="view-jogos" class="hidden fade-in">
+            <div class="premium-banner" style="background: linear-gradient(135deg, #ff0055, #a200ff);">
+                <h2>GALERIA DE JOGOS</h2>
+                <p>Divirta-se enquanto espera a próxima batalha!</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px;">
+                
+                <div style="background: var(--card-bg); border: 1px solid rgba(162, 0, 255, 0.3); border-radius: 15px; padding: 15px; text-align: center; box-shadow: 0 2px 8px rgba(162, 0, 255, 0.2);">
+                <i class="fas fa-ghost" style="font-size: 30px; color: #a200ff; margin-bottom: 10px;"></i>
+    
+               <h3 style="margin-bottom: 5px;">Cobrinha da Arena</h3>
+               <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Sobreviva usando sua foto de perfil!</p>
+    
+            <button onclick="entrarNoJogoCobrinha()" style="background: linear-gradient(90deg, #a200ff, #ff0055); border: none; color: white; padding: 12px 20px; border-radius: 10px; font-weight: 900; text-transform: uppercase; width: 100%; cursor: pointer;">
+            <i class="fas fa-play"></i> Jogar
+            </button>
+           </div>
+
+                <div style="background: var(--card-bg); border: 1px dashed rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 20px; text-align: center; opacity: 0.6;">
+                    <i class="fas fa-lock" style="font-size: 30px; margin-bottom: 10px;"></i>
+                    <h3>Em breve</h3>
+                    <p style="font-size: 12px; color: var(--text-muted);">Novos jogos chegarão na arena!</p>
+                </div>
+
+            </div>
+            <div class="spacer-bottom"></div>
+        </div>
+
+    </main>
+
+    <nav class="bottom-nav glass">
+        <button class="nav-item" id="nav-dash" onclick="mudarAba('dashboard')">
+            <i class="fas fa-chart-pie"></i>
+            <span>Global</span>
+        </button>
+        <button class="nav-item active" id="nav-videos" onclick="mudarAba('videos')">
+            <i class="fas fa-play-circle"></i>
+            <span>Partidas</span>
+        </button>
+        
+        <button class="nav-item" id="nav-jogos" onclick="mudarAba('jogos')">
+            <i class="fas fa-gamepad" style="color: #a200ff;"></i>
+            <span>Jogos</span>
+        </button>
+        
+        <button class="nav-item" onclick="window.open('https://tiktok.com/@batalha_dos_inscritos', '_blank')">
+            <i class="fab fa-tiktok" style="color: #00f2ea;"></i>
+            <span>TikTok</span>
+        </button>
+        <button class="nav-item" onclick="window.open('https://www.youtube.com/@batalha_dos_inscritos', '_blank')">
+            <i class="fab fa-youtube" style="color: #ff0000;"></i>
+            <span>YouTube</span>
+        </button>
+    </nav>
+
+    <div id="modal-perfil" class="modal-overlay">
+        <div class="bottom-sheet glass">
+            <div class="drag-handle"></div>
+            
+            <div class="profile-card">
+                <div class="sheet-avatar" id="perfil-avatar"></div>
+                <h2 id="perfil-nome">@Nome</h2>
+                <span class="badge" id="perfil-badge">Guerreiro</span>
+            </div>
+
+            <div class="sheet-stats">
+                <div class="s-box"><i class="fas fa-trophy gold"></i><span id="stat-vitorias">0</span><label>Vitórias</label></div>
+                <div class="s-box"><i class="fas fa-skull red"></i><span id="stat-kills">0</span><label>Kills Total</label></div>
+                <div class="s-box"><i class="fas fa-gamepad blue"></i><span id="stat-partidas">0</span><label>Partidas</label></div>
+            </div>
+
+            <details class="hist-accordion">
+                <summary class="hist-title"><i class="fas fa-list"></i> Histórico do Jogador</summary>
+                <div class="sheet-history custom-scroll" id="perfil-historico"></div>
+            </details>
+
+            <details class="hist-accordion" style="margin-top: 15px;">
+                <summary class="hist-title"><i class="fas fa-crosshairs"></i> Vítimas Recentes</summary>
+                <div class="sheet-history custom-scroll">
+                    <div style="text-align: center; font-size: 11px; color: #666; padding: 10px;">
+                        O registro detalhado de vítimas será ativado na próxima temporada da arena!
+                    </div>
+                </div>
+            </details>
+        </div>
+    </div>
+    
+    <div id="modal-tutorial" class="modal-overlay" style="align-items: center; justify-content: center;">
+        <div class="tutorial-card glass fade-in">
+            <h2><i class="fas fa-shield-alt" style="color: var(--primary);"></i> Bem-vindo à Arena!</h2>
+            <p>Veja como acompanhar o seu histórico de batalhas:</p>
+            
+            <ul class="tutorial-steps">
+                <li>
+                    <i class="fas fa-search" style="color: var(--gold);"></i> 
+                    <span>Clique na <b>Lupa</b> ali em cima para pesquisar rapidamente pelo seu nome.</span>
+                </li>
+                <li>
+                    <i class="fas fa-crosshairs" style="color: var(--danger);"></i> 
+                    <span>Descubra quantas <b>Kills</b> você fez e veja exatamente quem você eliminou.</span>
+                </li>
+                <li>
+                    <i class="fas fa-trophy" style="color: var(--primary);"></i> 
+                    <span>Navegue pelo <b>Global</b> para ver os maiores campeões de todos os tempos.</span>
+                </li>
+            </ul>
+            
+            <button onclick="fecharTutorial()" class="btn-tutorial">Entendi, vamos lá!</button>
+        </div>
+    </div>
+
+  <script>
+        // Cria a versão com o tempo atual
+        var tempoAtual = new Date().getTime();
+
+        // 1. Carrega o config.js PRIMEIRO
+        var scriptConfig = document.createElement('script');
+        scriptConfig.src = 'config.js?v=' + tempoAtual;
+        scriptConfig.async = false; // 👈 ISSO AQUI GARANTE A ORDEM
+        document.body.appendChild(scriptConfig);
+
+        // 2. Carrega o app.js DEPOIS do config
+        var scriptApp = document.createElement('script');
+        scriptApp.src = 'app.js?v=' + tempoAtual;
+        scriptApp.async = false; // 👈 ISSO AQUI GARANTE A ORDEM
+        
+        // 3. Avisa o app.js que a tela já está pronta para renderizar as listas
+        scriptApp.onload = function() {
+            document.dispatchEvent(new Event("DOMContentLoaded"));
+        };
+        document.body.appendChild(scriptApp);
+    </script>
+</body>
+</html>
+
